@@ -1,0 +1,4 @@
+db_url: "host=localhost user=cyber password=pass dbname=cyberc port=5432"
+jwt_sign_key: "THIS_IS_NOT_SO_SECRET+YOU_SHOULD_DEFINITELY_CHANGE_IT"
+port: 8080
+env: development
