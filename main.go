@@ -4,12 +4,12 @@ import (
 	"context"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/zayver/cybercomplaint-server/config"
-	"github.com/zayver/cybercomplaint-server/controller"
-	"github.com/zayver/cybercomplaint-server/middleware"
-	"github.com/zayver/cybercomplaint-server/repository"
-	"github.com/zayver/cybercomplaint-server/router"
-	"github.com/zayver/cybercomplaint-server/service"
+	"github.com/zayver/cyberc-server/config"
+	"github.com/zayver/cyberc-server/controller"
+	"github.com/zayver/cyberc-server/middleware"
+	"github.com/zayver/cyberc-server/repository"
+	"github.com/zayver/cyberc-server/router"
+	"github.com/zayver/cyberc-server/service"
 	"go.uber.org/fx"
 )
 

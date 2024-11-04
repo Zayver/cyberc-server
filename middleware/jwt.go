@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zayver/cybercomplaint-server/service"
+	"github.com/zayver/cyberc-server/service"
 )
 
 type JwtMiddleware struct{

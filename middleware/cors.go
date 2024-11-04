@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/zayver/cybercomplaint-server/config"
+	"github.com/zayver/cyberc-server/config"
 )
 
 type CorsMiddleware struct {

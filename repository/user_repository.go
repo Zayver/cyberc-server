@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/zayver/cybercomplaint-server/config"
-	"github.com/zayver/cybercomplaint-server/model"
+	"github.com/zayver/cyberc-server/config"
+	"github.com/zayver/cyberc-server/model"
 )
 
 type UserRepository struct{

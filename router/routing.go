@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/zayver/cybercomplaint-server/controller"
-	"github.com/zayver/cybercomplaint-server/middleware"
+	"github.com/zayver/cyberc-server/controller"
+	"github.com/zayver/cyberc-server/middleware"
 	"go.uber.org/fx"
 )
 
@@ -11,21 +11,23 @@ var Module = fx.Options(
 	fx.Provide(NewRoutes),
 )
 
-type Routes struct{
-	loginController controller.LoginController
-	jwtMiddleware middleware.JwtMiddleware
-	corsMiddleware middleware.CorsMiddleware
+type Routes struct {
+	loginController     controller.LoginController
+	complaintController controller.ComplaintController
+	jwtMiddleware       middleware.JwtMiddleware
+	corsMiddleware      middleware.CorsMiddleware
 }
 
-func NewRoutes(loginC controller.LoginController, jwt middleware.JwtMiddleware, cors middleware.CorsMiddleware) Routes{
+func NewRoutes(loginC controller.LoginController, complaintC controller.ComplaintController, jwt middleware.JwtMiddleware, cors middleware.CorsMiddleware) Routes {
 	return Routes{
 		loginController: loginC,
-		jwtMiddleware: jwt,
-		corsMiddleware: cors,
+		jwtMiddleware:   jwt,
+		corsMiddleware:  cors,
+		complaintController: complaintC,
 	}
 }
 
-func (r *Routes) Init() *gin.Engine{
+func (r *Routes) Init() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
@@ -33,26 +35,16 @@ func (r *Routes) Init() *gin.Engine{
 	api := router.Group("/api/v1")
 	api.Use(r.corsMiddleware.Setup())
 	{
-		//complaintController := controller.ComplaintController{}
-		//complaint := api.Group("/complaint")
-		//complaint.GET("", complaintController.GetAllComplaints)
-		//complaint.GET("/:id", complaintController.GetById)
-		//complaint.POST("", complaintController.CreateComplaint)
+		complaint := api.Group("/complaint")
+		complaint.GET("", r.jwtMiddleware.Handler(), r.complaintController.GetAllComplaints)
+		complaint.GET("/:id", r.jwtMiddleware.Handler() ,r.complaintController.GetComplaintById)
+		complaint.POST("", r.complaintController.CreateComplaint)
+
 	}
 	{
 		login := api.Group("/login")
 		login.POST("", r.loginController.Login)
 		login.POST("/signup", r.loginController.Signup)
-	}
-	{
-		test := api.Group("/test")
-		test.GET("/protected", r.jwtMiddleware.Handler() ,func(ctx *gin.Context) {
-			ctx.JSON(200, "ACCEPTED PROTECTED")
-		})
-
-		test.GET("/unprotected", func(ctx *gin.Context) {
-			ctx.JSON(200, "ACCEPTED PROTECTED")
-		})
 	}
 
 	return router

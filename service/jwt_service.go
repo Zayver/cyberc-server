@@ -2,10 +2,8 @@ package service
 
 import (
 	"time"
-
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/sirupsen/logrus"
-	"github.com/zayver/cybercomplaint-server/config"
+	"github.com/zayver/cyberc-server/config"
 )
 
 type JwtService struct{

@@ -2,10 +2,10 @@ package service
 
 import (
 	log "github.com/sirupsen/logrus"
-	"github.com/zayver/cybercomplaint-server/dto/request"
-	"github.com/zayver/cybercomplaint-server/dto/response"
-	"github.com/zayver/cybercomplaint-server/model"
-	"github.com/zayver/cybercomplaint-server/repository"
+	"github.com/zayver/cyberc-server/dto/request"
+	"github.com/zayver/cyberc-server/dto/response"
+	"github.com/zayver/cyberc-server/model"
+	"github.com/zayver/cyberc-server/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
