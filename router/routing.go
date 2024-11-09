@@ -37,14 +37,15 @@ func (r *Routes) Init() *gin.Engine {
 	{
 		complaint := api.Group("/complaint")
 		complaint.GET("", r.jwtMiddleware.Handler(), r.complaintController.GetAllComplaints)
-		complaint.GET("/:id", r.jwtMiddleware.Handler() ,r.complaintController.GetComplaintById)
+		complaint.GET("/filter", r.jwtMiddleware.Handler(), r.complaintController.GetComplaintsByCC)
+		complaint.GET("/:id", r.complaintController.GetComplaintById)
+		complaint.PUT("/:id/progress", r.complaintController.ProgressStatus)
 		complaint.POST("", r.complaintController.CreateComplaint)
 
 	}
 	{
 		login := api.Group("/login")
 		login.POST("", r.loginController.Login)
-		login.POST("/signup", r.loginController.Signup)
 	}
 
 	return router

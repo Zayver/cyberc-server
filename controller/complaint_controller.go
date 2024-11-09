@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/zayver/cyberc-server/dto/request"
+	"github.com/zayver/cyberc-server/repository"
 	"github.com/zayver/cyberc-server/scopes"
 	"github.com/zayver/cyberc-server/service"
 	"gorm.io/gorm"
@@ -35,13 +36,14 @@ func (c * ComplaintController) GetAllComplaints(ctx * gin.Context){
 	if err != nil{
 		pageSize = scopes.DEFAULT_PAGE_SIZE
 	}	
-	complaints, err := c.complaintService.GetAllComplaints(page, pageSize)
+	complaints, total, err := c.complaintService.GetAllComplaints(page, pageSize)
 	if err != nil{
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"complaints": complaints,
+		"total": total,
 		"hasNext": len(complaints) == pageSize,
 	})
 }
@@ -76,12 +78,53 @@ func (c *ComplaintController) CreateComplaint(ctx * gin.Context){
 		ctx.Status(http.StatusBadRequest)
 		return
 	}
-	_, err := c.complaintService.CreateComplaint(request)
+	res, err := c.complaintService.CreateComplaint(request)
 
 	if err != nil{
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
 
-	ctx.Status(http.StatusCreated)
+	ctx.JSON(http.StatusCreated, gin.H{
+		"id": res.ID,
+	})
+}
+
+func (c * ComplaintController) GetComplaintsByCC(ctx *gin.Context){
+	cc := ctx.Query("cc")
+	if cc == ""{
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+	complaints, err := c.complaintService.GetComplaintsByCC(cc)
+	if err != nil{
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"complaints": complaints,
+		"hasNext": len(complaints) == 10,
+	})
+}
+
+func (c *ComplaintController) ProgressStatus(ctx *gin.Context){
+	idParam := ctx.Param("id")
+	id, err := uuid.Parse(idParam)
+	if err != nil{
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	if err:= c.complaintService.ProgressStatus(id); err != nil{
+		if errors.Is(err, repository.ErrUnprocessableEntity){
+			ctx.Status(http.StatusUnprocessableEntity)
+			return
+		}
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			ctx.Status(http.StatusNotFound)
+			return
+		}
+		ctx.Status(http.StatusInternalServerError)
+		return 
+	}
 }

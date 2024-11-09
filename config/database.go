@@ -14,7 +14,6 @@ import (
 
 type DB struct{
 	DB *gorm.DB
-	config ConfigHolder
 }
 
 func NewDatabase(config ConfigHolder) DB{
@@ -30,7 +29,7 @@ func connectDB(url string) *gorm.DB{
 	if err != nil {
 		log.Fatal("Error connecting to database. Error: ", err)
 	}
-	log.Info("Connected to db", url)
+	log.Info("Connected to db")
 	err = db.AutoMigrate(&model.Complaint{}, &model.User{})
 	if err != nil{
 		log.Fatal("Failed to migrate models to db: ", err)
@@ -51,7 +50,7 @@ func initDB(db *gorm.DB){
 		log.Info("Creating user for first boot, pass: ", string(gen))
 		pass, _ := bcrypt.GenerateFromPassword(gen, bcrypt.DefaultCost)
 		user := model.User{
-			Username: "test",
+			Username: "malpica",
 			Password: string(pass),
 		}
 		if err := db.Save(&user).Error; err != nil{
@@ -75,8 +74,4 @@ func generatePassword(length int) []byte {
 		password[i] = charset[index.Int64()]
 	}
 	return password
-}
-
-func migrate(){
-
 }

@@ -16,6 +16,7 @@ func NewCorsMiddleware(config config.ConfigHolder) CorsMiddleware{
 	}
 }
 
+
 func (c *CorsMiddleware) Setup() gin.HandlerFunc{
 	var corsM gin.HandlerFunc
 	if c.config.Env == "development" {
@@ -28,7 +29,9 @@ func (c *CorsMiddleware) Setup() gin.HandlerFunc{
 	}else{
 		corsM = cors.New(cors.Config{
 			AllowCredentials: true,
-			AllowOriginFunc:  func(origin string) bool { return true },
+			AllowOriginFunc:  func(origin string) bool {
+				return origin == "cyberc.vercel.app"
+			},
 			AllowHeaders:   []string{},
 			AllowMethods:   []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
 		})

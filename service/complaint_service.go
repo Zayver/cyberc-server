@@ -22,7 +22,7 @@ func NewComplaintService(complaintRepo repository.ComplaintRepository) Complaint
 func (c *ComplaintService) CreateComplaint(request request.CreateComplaintRequest) (response.ComplaintResponse, error){
 	entity := model.Complaint{}
 	mapper.AutoMapper(&request, &entity)
-	
+	entity.Status = model.CREATED
 	entity, err := c.complaintRepository.CreateComplaint(entity)
 	if err != nil{
 		return response.ComplaintResponse{},err
@@ -32,14 +32,14 @@ func (c *ComplaintService) CreateComplaint(request request.CreateComplaintReques
 	return response, nil
 }
 
-func (c * ComplaintService) GetAllComplaints(page, pageSize int) ([]response.ComplaintResponse, error){
-	entities, err := c.complaintRepository.GetAllComplaints(page, pageSize)
+func (c * ComplaintService) GetAllComplaints(page, pageSize int) ([]response.ComplaintResponse, int64 , error){
+	entities, total, err := c.complaintRepository.GetAllComplaints(page, pageSize)
 	if err != nil{
-		return []response.ComplaintResponse{}, err
+		return []response.ComplaintResponse{}, 0, err
 	}
 	var res = []response.ComplaintResponse{}
 	mapper.MapperSlice(&entities, &res)
-	return res, nil
+	return res, total, nil
 }
 
 func (c * ComplaintService) GetComplaintById(id uuid.UUID) (model.Complaint, error){
@@ -52,6 +52,23 @@ func (c * ComplaintService) GetComplaintById(id uuid.UUID) (model.Complaint, err
 
 func (c * ComplaintService) DeleteComplaint(id uuid.UUID) error{
 	if err := c.complaintRepository.DeleteComplaint(id); err != nil{
+		return err
+	}
+	return nil
+}
+
+func (c * ComplaintService) GetComplaintsByCC(cc string) ([]response.ComplaintResponse, error){
+	complaints, err := c.complaintRepository.GetComplaintsByCC(cc)
+	if err != nil{
+		return []response.ComplaintResponse{}, nil
+	}
+	var res = []response.ComplaintResponse{}
+	mapper.MapperSlice(&complaints, &res)
+	return res, nil
+}
+
+func (c * ComplaintService) ProgressStatus(id uuid.UUID) error{
+	if err := c.complaintRepository.ProgressStatus(id); err != nil{
 		return err
 	}
 	return nil

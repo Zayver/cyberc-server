@@ -10,3 +10,11 @@ const (
 	AGAINST_PUBLIC_HEALTH
 	AGAINST_STATE
 )
+
+type ComplaintStatus uint
+
+const (
+	CREATED ComplaintStatus = iota
+	IN_PROCESS
+	FINALIZED
+)

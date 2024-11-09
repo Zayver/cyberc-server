@@ -13,4 +13,5 @@ type Complaint struct{
 	Cc string `gorm:"column:cc; not null" json:"cc"`
 	Description string `gorm:"column:description; not null" json:"description"`
 	Type ComplaintType `gorm:"column:type; not null" json:"type"`
+	Status ComplaintStatus `gorm:"column:status; not null" json:"status"`
 }
