@@ -32,7 +32,7 @@ func (c *CorsMiddleware) Setup() gin.HandlerFunc{
 			AllowOriginFunc:  func(origin string) bool {
 				return origin == "https://cyberc.vercel.app"
 			},
-			AllowHeaders:   []string{},
+			AllowHeaders:   []string{"Origin", "Authorization"},
 			AllowMethods:   []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
 		})
 	}
