@@ -30,7 +30,7 @@ func connectDB(url string) *gorm.DB{
 		log.Fatal("Error connecting to database. Error: ", err)
 	}
 	log.Info("Connected to db")
-	err = db.AutoMigrate(&model.Complaint{}, &model.User{})
+	//err = db.AutoMigrate(&model.Complaint{}, &model.User{})
 	if err != nil{
 		log.Fatal("Failed to migrate models to db: ", err)
 	}
