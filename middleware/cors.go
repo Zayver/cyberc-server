@@ -30,7 +30,7 @@ func (c *CorsMiddleware) Setup() gin.HandlerFunc{
 		corsM = cors.New(cors.Config{
 			AllowCredentials: true,
 			AllowOriginFunc:  func(origin string) bool {
-				return origin == "cyberc.vercel.app"
+				return origin == "https://cyberc.vercel.app"
 			},
 			AllowHeaders:   []string{},
 			AllowMethods:   []string{"GET", "POST", "PUT", "HEAD", "OPTIONS"},
