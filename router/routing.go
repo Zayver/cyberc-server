@@ -31,9 +31,9 @@ func (r *Routes) Init() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	router.Use(r.corsMiddleware.Setup())
 
 	api := router.Group("/api/v1")
-	api.Use(r.corsMiddleware.Setup())
 	{
 		complaint := api.Group("/complaint")
 		complaint.GET("", r.jwtMiddleware.Handler(), r.complaintController.GetAllComplaints)
